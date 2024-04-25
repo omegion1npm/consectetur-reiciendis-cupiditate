@@ -1,3 +1,48 @@
-The algorithm continuously evaluates and scores open source software projects in supported package managers based on their impact and value to the OSS ecosystem.
+# @omegion1npm/consectetur-reiciendis-cupiditate
+[![build status](https://img.shields.io/github/actions/workflow/status/omegion1npm/consectetur-reiciendis-cupiditate/test.yaml?branch=master)](https://github.com/omegion1npm/consectetur-reiciendis-cupiditate/actions/workflows/test.yaml)
+[![npm version](https://img.shields.io/npm/v/@omegion1npm/consectetur-reiciendis-cupiditate.svg)](https://www.npmjs.com/package/@omegion1npm/consectetur-reiciendis-cupiditate)
 
-Simple support tea in reguide template can increase for an open source software project with an increasing number of dependents
+N-Triples serializer that implements the [RDF/JS Sink interface](http://rdf.js.org/).
+
+## Usage
+
+The package exports the serializer as a class, so an instance must be created before it can be used.
+The `.import` method, as defined in the [RDF/JS specification](http://rdf.js.org/#sink-interface), must be called to do the actual serialization.
+It expects a quad stream as argument.
+The method will return a stream which emits N-Triples as strings.
+The constructor doesn't need any options.
+
+### Example
+
+This example shows how to create a serializer instance and how to feed it with a stream of quads.
+The N-Triples string emitted by the serializer will be written to the console.
+
+```javascript
+import rdf from '@rdfjs/data-model'
+import { Readable } from 'readable-stream'
+import SerializerNtriples from '@omegion1npm/consectetur-reiciendis-cupiditate'
+
+const serializerNtriples = new SerializerNtriples()
+const input = Readable.from([
+  rdf.quad(
+    rdf.namedNode('http://example.org/sheldon-cooper'),
+    rdf.namedNode('http://schema.org/givenName'),
+    rdf.literal('Sheldon')
+  ),
+  rdf.quad(
+    rdf.namedNode('http://example.org/sheldon-cooper'),
+    rdf.namedNode('http://schema.org/familyName'),
+    rdf.literal('Cooper')
+  ),
+  rdf.quad(
+    rdf.namedNode('http://example.org/sheldon-cooper'),
+    rdf.namedNode('http://schema.org/knows'),
+    rdf.namedNode('http://example.org/amy-farrah-fowler')
+  )  
+])
+const output = serializerNtriples.import(input)
+
+output.on('data', ntriples => {
+  console.log(ntriples.toString())
+})
+```
